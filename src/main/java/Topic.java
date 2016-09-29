@@ -3,8 +3,9 @@ import java.util.ArrayList;
 import org.sql2o.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.sql.SQLException;
 
-public class Topic extends Post {
+public class Topic extends Post implements DatabaseMethods {
   private String title;
 
   public Topic(String title, String content, int user_id) {
@@ -29,7 +30,7 @@ public class Topic extends Post {
   }
 
   public void save() {
-    try(Connection con = DB.sql2o.open()) {
+    try (Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO topics(title, content, user_id, createdat) VALUES (:title, :content, :user_id, now())";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("title", this.title)

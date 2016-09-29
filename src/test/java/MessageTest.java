@@ -79,15 +79,36 @@ public class MessageTest {
       assertEquals(rightNow.getDay(), savedTestMessage.getDay());
   }
 
-  // @Test
-  // public void addRecipe_addsRecipeToMessage() {
-  //   Message testMessage = new Message("fast");
-  //   testMessage.save();
-  //   Recipes testRecipe = new Recipes("Chicken and Rice", "One whole chicken, 2 cups of rice, 4 cups of Water", "1. Cook Chicken in Oven 350 degrees (until white). 2. Boil rice in rice-cooker. 3. Season rice and chicken. 4. Put rice and chiken together.");
-  //   testRecipe.save();
-  //   testMessage.addRecipe(testRecipe);
-  //   Recipes savedRecipe = testMessage.getRecipe().get(0);
-  //   assertTrue(testRecipe.equals(savedRecipe));
-  // }
+  @Test
+  public void likes_ownException() {
+    Message testMessage = new Message("This topic sucks", 1);
+    testMessage.save();
+    try {
+        testMessage.likes(1);
+      } catch (UnsupportedOperationException exception){ }
+    assertTrue(0 == testMessage.getLikes());
+  }
+
+  @Test
+  public void likes_gainLikes() {
+    Message testMessage = new Message("This topic sucks", 1);
+    testMessage.save();
+    try {
+        testMessage.likes(2);
+      } catch (UnsupportedOperationException exception){ }
+    assertTrue(1 == testMessage.getLikes());
+  }
+
+  @Test
+  public void likes_OnlyOneLikesperUser() {
+    Message testMessage = new Message("This topic sucks", 1);
+    testMessage.save();
+    try {
+        testMessage.likes(2);
+        testMessage.likes(2);
+      } catch (UnsupportedOperationException exception){ }
+    assertTrue(1 == testMessage.getLikes());
+  }
+
 
 }

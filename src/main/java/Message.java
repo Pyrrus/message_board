@@ -3,10 +3,17 @@ import java.util.ArrayList;
 import org.sql2o.*;
 import java.sql.Timestamp;
 
-public class Message extends Post {
+public class Message extends Post implements DatabaseMethods {
+
+  public static final int likesMax = 1;
+  public int like;
+  public int counter;
+
   public Message(String content, int user_id) {
     this.content = content;
     this.user_id = user_id;
+    this.like = 0;
+    this.counter = 0;
   }
 
   @Override
@@ -72,5 +79,29 @@ public class Message extends Post {
       .executeAndFetchFirst(Message.class);
     return message;
     }
+  }
+
+  public void likes(int user_id) {
+    if (user_id == this.user_id){
+      System.out.println("You cannot do own like message!");
+      throw new UnsupportedOperationException("You cannot do own like message!");
+
+    } else if (counter == likesMax) {
+      System.out.println("You cannot do more than one like");
+      throw new UnsupportedOperationException("You cannot do more than one like");
+
+    } else {
+      counter++;
+      gainLikes();
+    }
+
+  }
+
+  public int getLikes() {
+    return like;
+  }
+
+  public void gainLikes() {
+    like++;
   }
 }
